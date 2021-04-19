@@ -15,30 +15,28 @@ import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
 
-
-
 public class NeighbourProfilActivity extends AppCompatActivity {
 
 
     private NeighbourApiService mApiService;
 
-    ImageView imgProfil;
-    ImageButton retourButton;
-    TextView Nameprofile;
-    FloatingActionButton floatingActionButton;
-    TextView NameUsers;
-    TextView addreseUsers;
-    TextView tellUsers;
-    TextView mailUsers;
-    TextView Aproposdemoi;
-    TextView aboutMe;
-    Neighbour profil;
+    private ImageView imgProfil;
+    private ImageButton retourButton;
+    private TextView Nameprofile;
+    private FloatingActionButton floatingActionButton;
+    private TextView NameUsers;
+    private TextView addreseUsers;
+    private TextView tellUsers;
+    private TextView mailUsers;
+    private TextView Aproposdemoi;
+    private TextView aboutMe;
+    private Neighbour profil;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_neighbour_profil_2);
+        setContentView(R.layout.activity_neighbour_profil);
 
         imgProfil = findViewById(R.id.imgProfil);
         Nameprofile = findViewById(R.id.Nameprofile);
