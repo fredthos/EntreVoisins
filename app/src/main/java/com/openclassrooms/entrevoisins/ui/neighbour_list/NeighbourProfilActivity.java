@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,74 +15,74 @@ import com.openclassrooms.entrevoisins.di.DI;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
 
+import static com.openclassrooms.entrevoisins.ui.neighbour_list.MyNeighbourRecyclerViewAdapter.SELECTED_NEIGHBOUR;
+
 public class NeighbourProfilActivity extends AppCompatActivity {
 
 
     private NeighbourApiService mApiService;
 
-    private ImageView imgProfil;
-    private ImageView retourButton;
-    private TextView Nameprofile;
+    private ImageView neighbourImg;
+    private Toolbar mToolbar;
+    private TextView TBneighbourName;
     private FloatingActionButton favorisButton;
-    private TextView NameUsers;
-    private TextView addreseUsers;
-    private TextView tellUsers;
-    private TextView mailUsers;
-    private TextView Aproposdemoi;
-    private TextView aboutMe;
-    private Neighbour profil;
+    private TextView neighbourName;
+    private TextView neighbourAddress;
+    private TextView neighbourPhone;
+    private TextView neighbourFB;
+    private TextView neighbourAboutMe;
+    private Neighbour neighbour;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_neighbour_profil);
-        Toolbar toolbar = findViewById(R.id.activity_profil_toolbar);
-        setSupportActionBar(toolbar);
 
-        imgProfil = findViewById(R.id.imgProfil);
-        Nameprofile = findViewById(R.id.Nameprofile);
-        NameUsers = findViewById(R.id.NameUsers);
-        addreseUsers = findViewById(R.id.addreseUsers);
-        tellUsers = findViewById(R.id.tellUsers);
-        mailUsers = findViewById(R.id.mailUsers);
-        Aproposdemoi = findViewById(R.id.Aproposdemoi);
-        aboutMe = findViewById(R.id.aboutMe);
+        //Wire Widgets
+        neighbourImg = findViewById(R.id.neighbourImg);
+        neighbourName = findViewById(R.id.neighbourName);
+        TBneighbourName = findViewById(R.id.TBneighbourName);
+        neighbourAddress = findViewById(R.id.neighbourAddress);
+        neighbourPhone = findViewById(R.id.neighbourPhone);
+        neighbourFB = findViewById(R.id.neighbourFB);
+        neighbourAboutMe = findViewById(R.id.neighbourAboutMe);
+        favorisButton = findViewById(R.id.favoris_Button);
+        mToolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         mApiService = DI.getNeighbourApiService();
-        profil = getIntent().getParcelableExtra("profil");
+        neighbour = getIntent().getParcelableExtra(SELECTED_NEIGHBOUR);
 
-        Glide.with(this).load(profil.getAvatarUrl()).into(imgProfil);
+        Glide.with(this).load(neighbour.getAvatarUrl()).into(neighbourImg);
 
-        Nameprofile.setText(profil.getName());
-        NameUsers.setText(profil.getName());
-        mailUsers.setText(mailUsers.getText() + profil.getName());
+        neighbourName.setText(neighbour.getName());
+        TBneighbourName.setText(neighbour.getName());
+        neighbourFB.setText(neighbourFB.getText() + neighbour.getName());
 
-        retourButton = findViewById(R.id.retourButton);
-        retourButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
-        favorisButton = findViewById(R.id.favoris_Button);
-        if (profil.isFavoris()) {
-            favorisButton.setImageResource(R.drawable.ic_baseline_star_24);
-        } else favorisButton.setImageResource(R.drawable.ic_star_white_24dp);
+        if (neighbour.isFavori()) {
+            favorisButton.setImageDrawable(getDrawable(R.drawable.ic_yellow_star_24));
+        } else favorisButton.setImageDrawable(getDrawable(R.drawable.ic_grey_star_24));
 
         favorisButton.setOnClickListener(new View.OnClickListener() {
-
             /**
-             * utilisation de ma methode de services changeFavoris
-             * @param v
+             * utilisation de l'ajout de voisin dans favoris
+             * @param view
              */
             @Override
-            public void onClick(View v) {
-
-
-
+            public void onClick(View view) {
+                if (!neighbour.isFavori()) {
+                    neighbour.setFavori(true);
+                    favorisButton.setImageDrawable(getDrawable(R.drawable.ic_yellow_star_24));
+                    mApiService.addFavNeighbour(neighbour);
+                } else {
+                    neighbour.setFavori(false);
+                    favorisButton.setImageDrawable(getDrawable(R.drawable.ic_grey_star_24));
+                    mApiService.removeFavNeighbour(neighbour);
+                }
             }
         });
     }

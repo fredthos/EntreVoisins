@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeighbourRecyclerViewAdapter.ViewHolder> {
 
     private final List<Neighbour> mNeighbours;
+    public static final String SELECTED_NEIGHBOUR = "SELECTED_NEIGHBOUR";
 
     public MyNeighbourRecyclerViewAdapter(List<Neighbour> items) {
         mNeighbours = items;
@@ -56,8 +57,8 @@ public class MyNeighbourRecyclerViewAdapter extends RecyclerView.Adapter<MyNeigh
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent gotoNeighbourProfilActivity = new Intent(holder.itemView.getContext(),NeighbourProfilActivity.class);
-                gotoNeighbourProfilActivity.putExtra("profil",neighbour);
+                Intent gotoNeighbourProfilActivity = new Intent(holder.itemView.getContext(), NeighbourProfilActivity.class);
+                gotoNeighbourProfilActivity.putExtra(SELECTED_NEIGHBOUR, neighbour);
                 holder.itemView.getContext().startActivity(gotoNeighbourProfilActivity);
             }
         });

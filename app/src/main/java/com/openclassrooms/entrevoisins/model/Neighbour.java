@@ -3,6 +3,7 @@ package com.openclassrooms.entrevoisins.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -10,42 +11,95 @@ import java.util.Objects;
  */
 public class Neighbour implements Parcelable {
 
-    /** Identifier */
+    /**
+     * Identifier
+     */
     private long id;
 
-    /** Full name */
+    /**
+     * Full name
+     */
     private String name;
 
-    /** Avatar */
+    /**
+     * Avatar
+     */
     private String avatarUrl;
 
-    /** Adress */
+    /**
+     * Adress
+     */
     private String address;
 
-    /** Phone number */
+    /**
+     * Phone number
+     */
     private String phoneNumber;
 
-    /** About me */
+    /**
+     * About me
+     */
     private String aboutMe;
 
-    /** favoris **/
-    private boolean favoris;
+    /**
+     * favori yes or no
+     **/
+    private boolean favori;
 
     /**
      * Constructor
+     *
      * @param id
      * @param name
      * @param avatarUrl
      */
     public Neighbour(long id, String name, String avatarUrl, String address,
-                     String phoneNumber, String aboutMe, boolean favoris) {
+                     String phoneNumber, String aboutMe, boolean favori) {
         this.id = id;
         this.name = name;
         this.avatarUrl = avatarUrl;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.aboutMe = aboutMe;
-        this.favoris = favoris;
+        this.favori = favori;
+    }
+
+    protected Neighbour(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        avatarUrl = in.readString();
+        address = in.readString();
+        phoneNumber = in.readString();
+        aboutMe = in.readString();
+        favori = in.readInt() == 1;
+    }
+
+    public static final Parcelable.Creator<Neighbour> CREATOR = new Parcelable.Creator<Neighbour>() {
+        @Override
+        public Neighbour createFromParcel(Parcel in) {
+            return new Neighbour(in);
+        }
+
+        @Override
+        public Neighbour[] newArray(int size) {
+            return new Neighbour[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(name);
+        parcel.writeString(avatarUrl);
+        parcel.writeString(address);
+        parcel.writeString(phoneNumber);
+        parcel.writeString(aboutMe);
+        parcel.writeInt(favori ? 1 : 0);
     }
 
     public long getId() {
@@ -96,12 +150,12 @@ public class Neighbour implements Parcelable {
         this.aboutMe = aboutMe;
     }
 
-    public boolean isFavoris() {
-        return favoris;
+    public boolean isFavori() {
+        return favori;
     }
 
-    public void setFavoris(boolean favoris) {
-        this.favoris = favoris;
+    public void setFavori(boolean favori) {
+        this.favori = favori;
     }
 
     @Override
@@ -112,46 +166,8 @@ public class Neighbour implements Parcelable {
         return Objects.equals(id, neighbour.id);
     }
 
-    public static final Parcelable.Creator<Neighbour> CREATOR = new Parcelable.Creator<Neighbour>() {
-        @Override
-        public Neighbour createFromParcel(Parcel in) {
-            return new Neighbour(in);
-        }
-
-        @Override
-        public Neighbour[] newArray(int size) {
-            return new Neighbour[size];
-        }
-    };
-
-    protected Neighbour(Parcel in) {
-        id = in.readLong();
-        name = in.readString();
-        avatarUrl = in.readString();
-        address = in.readString();
-        phoneNumber = in.readString();
-        aboutMe = in.readString();
-        favoris = in.readByte() != 0;
-    }
-
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeString(name);
-        parcel.writeString(avatarUrl);
-        parcel.writeString(address);
-        parcel.writeString(phoneNumber);
-        parcel.writeString(aboutMe);
-        parcel.writeByte((byte) (favoris ? 1 : 0));
     }
 }
