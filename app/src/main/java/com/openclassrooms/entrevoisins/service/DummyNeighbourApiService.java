@@ -1,7 +1,11 @@
 package com.openclassrooms.entrevoisins.service;
 
+import android.os.Parcelable;
+import android.view.View;
+
 import com.openclassrooms.entrevoisins.model.Neighbour;
 
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,4 +59,12 @@ public class DummyNeighbourApiService implements NeighbourApiService {
         favNeighbours.add(neighbour);
     }
 
+    @Override
+    public boolean checkUser(Neighbour neighbour) {
+        if (favNeighbours.contains(neighbour)){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }

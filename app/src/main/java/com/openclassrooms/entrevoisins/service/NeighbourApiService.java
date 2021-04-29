@@ -50,4 +50,6 @@ public interface NeighbourApiService {
      * @param neighbour
      */
     void addFavNeighbour(Neighbour neighbour);
+
+    boolean checkUser(Neighbour neighbour);
 }

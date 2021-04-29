@@ -63,7 +63,7 @@ public class NeighbourProfilActivity extends AppCompatActivity {
         TBneighbourName.setText(neighbour.getName());
         neighbourFB.setText(neighbourFB.getText() + neighbour.getName());
 
-        if (neighbour.isFavorite()) {
+        if (mApiService.checkUser(neighbour)) {
             favorisButton.setImageDrawable(getDrawable(R.drawable.ic_yellow_star_24));
         } else favorisButton.setImageDrawable(getDrawable(R.drawable.ic_grey_star_24));
 
@@ -74,12 +74,10 @@ public class NeighbourProfilActivity extends AppCompatActivity {
              */
             @Override
             public void onClick(View view) {
-                if (!neighbour.isFavorite()) {
-                    neighbour.setFavorite(true);
+                if (!mApiService.checkUser(neighbour)) {
                     favorisButton.setImageDrawable(getDrawable(R.drawable.ic_yellow_star_24));
                     mApiService.addFavNeighbour(neighbour);
                 } else {
-                    neighbour.setFavorite(false);
                     favorisButton.setImageDrawable(getDrawable(R.drawable.ic_grey_star_24));
                     mApiService.removeFavNeighbour(neighbour);
                 }
