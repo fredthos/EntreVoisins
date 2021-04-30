@@ -8,6 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.openclassrooms.entrevoisins.R;
 import com.openclassrooms.entrevoisins.ui.neighbour_list.ListNeighbourActivity;
+import com.openclassrooms.entrevoisins.ui.neighbour_list.NeighbourProfilActivity;
 import com.openclassrooms.entrevoisins.utils.DeleteViewAction;
 
 import org.junit.Before;
@@ -73,5 +74,18 @@ public class NeighboursListTest {
         // Then : the number of element is 11
         onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT - 1));
     }
+
+    /**
+     * Ouverture du detail au moment de al selection d'un voisin dans la liste.
+     */
+    @Test
+    public void myNeighbourList_onClickItem_shouldOpenNeighbourProfilActivity() {
+        //Resultat : ouverture du detail
+        //Click sur le voisin
+        onView(ViewMatchers.withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        //Aprés: verification de l'affichage du voisin
+        onView(ViewMatchers.withId(R.id.neighbourName)).check(matches(isDisplayed()));
+    }
+
 
 }
