@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -49,30 +48,48 @@ public class NeighbourServiceTest {
     @Test
     public void getFavNeighboursWithSuccess() {
         List<Neighbour> favNeighbours = service.getFavNeighbours();
-        List<Neighbour> favExpectedNeighbours = new ArrayList<>();
-        assertThat(favNeighbours, IsIterableContainingInAnyOrder.containsInAnyOrder(favExpectedNeighbours.toArray()));
-
+        favNeighbours.add(service.getNeighbours().get(0));
+        favNeighbours.add(service.getNeighbours().get(1));
+        List<Neighbour> expectedFavNeighbours = service.getNeighbours().subList(0, 2);
+        assertEquals(expectedFavNeighbours, service.getFavNeighbours());
     }
 
     @Test
     public void removeFavNeighbourWithSuccess() {
+        List<Neighbour> favNeighbours = service.getFavNeighbours();
+        favNeighbours.add(service.getNeighbours().get(0));
+        favNeighbours.add(service.getNeighbours().get(1));
         Neighbour neighbourToRemove = service.getNeighbours().get(0);
         service.removeFavNeighbour(neighbourToRemove);
         assertFalse(service.getFavNeighbours().contains(neighbourToRemove));
     }
 
     @Test
-    public void addFavNeighbourWithSuccess(){
+    public void addFavNeighbourWithSuccess() {
+        service.getFavNeighbours().clear();
         Neighbour neighbourToAdd = service.getNeighbours().get(0);
         service.addFavNeighbour(neighbourToAdd);
         assertTrue(service.getFavNeighbours().contains(neighbourToAdd));
-
     }
 
     @Test
-    public void checkUserWithSuccess() {
-        Neighbour neighbourToCheck = service.getNeighbours().get(0);
-        service.checkUser(neighbourToCheck);
-        assert(service.getFavNeighbours().contains(neighbourToCheck));
+    public void checkUserInListWithSuccess() {
+        service.getFavNeighbours().clear();
+        List<Neighbour> favNeighbours = service.getFavNeighbours();
+        favNeighbours.add(service.getNeighbours().get(0));
+        Neighbour neighbourToCheckInList = service.getNeighbours().get(0);
+        service.checkUser(neighbourToCheckInList);
+        assertTrue(service.getFavNeighbours().contains(neighbourToCheckInList));
+    }
+
+    @Test
+    public void checkUserNotInListWithSuccess() {
+        service.getFavNeighbours().clear();
+        List<Neighbour> favNeighbours = service.getFavNeighbours();
+        favNeighbours.add(service.getNeighbours().get(0));
+        Neighbour neighbourToCheckNotInList = service.getNeighbours().get(0);
+        service.checkUser(neighbourToCheckNotInList);
+        assertTrue(service.getFavNeighbours().contains(neighbourToCheckNotInList));
+
     }
 }

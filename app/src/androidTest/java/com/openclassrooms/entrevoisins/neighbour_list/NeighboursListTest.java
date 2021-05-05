@@ -1,32 +1,43 @@
 package com.openclassrooms.entrevoisins.neighbour_list;
 
-import android.support.test.espresso.assertion.ViewAssertions;
+import android.app.Service;
+import android.os.Parcelable;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.openclassrooms.entrevoisins.R;
+import com.openclassrooms.entrevoisins.model.Neighbour;
+import com.openclassrooms.entrevoisins.service.DummyNeighbourApiService;
+import com.openclassrooms.entrevoisins.service.NeighbourApiService;
 import com.openclassrooms.entrevoisins.ui.neighbour_list.ListNeighbourActivity;
 import com.openclassrooms.entrevoisins.ui.neighbour_list.NeighbourProfilActivity;
 import com.openclassrooms.entrevoisins.utils.DeleteViewAction;
 
+import org.hamcrest.core.StringContains;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.regex.MatchResult;
+
+import java.security.Provider;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
+import static android.support.test.espresso.matcher.ViewMatchers.hasContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withResourceName;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static com.openclassrooms.entrevoisins.utils.RecyclerViewItemCountAssertion.withItemCount;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.IsNull.notNullValue;
 
 
@@ -84,8 +95,18 @@ public class NeighboursListTest {
         //Click sur le voisin
         onView(ViewMatchers.withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         //Aprés: verification de l'affichage du voisin
-        onView(ViewMatchers.withId(R.id.neighbourName)).check(matches(isDisplayed()));
+        onView(ViewMatchers.withId(R.id.activity_profil_details)).check(matches(isDisplayed()));
     }
 
-
+    /**
+     * Verification du nom du NeighbourProfilActivity est le meme que le voisin selectionné
+     */
+    @Test
+    public void activityProfilName_onNeighbourprofilactivity_isCorrect(){
+        //Resultat : Affichage du bon prenom dans le profil
+        //Ouverture du profil
+        onView(ViewMatchers.withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        //Verification prenom du profile = prenom du voisin
+        onView(ViewMatchers.withId(R.id.TBneighbourName)).check(matches(withText("Caroline")));
+    }
 }
