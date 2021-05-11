@@ -13,8 +13,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -29,6 +27,7 @@ public class NeighbourServiceTest {
     @Before
     public void setup() {
         service = DI.getNewInstanceApiService();
+        service.getFavNeighbours().clear();
     }
 
     @Test
@@ -66,7 +65,6 @@ public class NeighbourServiceTest {
 
     @Test
     public void addFavNeighbourWithSuccess() {
-        service.getFavNeighbours().clear();
         Neighbour neighbourToAdd = service.getNeighbours().get(0);
         service.addFavNeighbour(neighbourToAdd);
         assertTrue(service.getFavNeighbours().contains(neighbourToAdd));
@@ -74,22 +72,20 @@ public class NeighbourServiceTest {
 
     @Test
     public void checkUserInListWithSuccess() {
-        service.getFavNeighbours().clear();
         List<Neighbour> favNeighbours = service.getFavNeighbours();
         favNeighbours.add(service.getNeighbours().get(0));
         Neighbour neighbourToCheckInList = service.getNeighbours().get(0);
         service.checkUser(neighbourToCheckInList);
-        assertTrue(service.getFavNeighbours().contains(neighbourToCheckInList));
+        assertTrue(service.checkUser(neighbourToCheckInList));
     }
 
     @Test
     public void checkUserNotInListWithSuccess() {
-        service.getFavNeighbours().clear();
         List<Neighbour> favNeighbours = service.getFavNeighbours();
         favNeighbours.add(service.getNeighbours().get(0));
         Neighbour neighbourToCheckNotInList = service.getNeighbours().get(0);
-        service.checkUser(neighbourToCheckNotInList);
-        assertTrue(service.getFavNeighbours().contains(neighbourToCheckNotInList));
+        service.removeFavNeighbour(neighbourToCheckNotInList);
+        assertTrue(!service.checkUser(neighbourToCheckNotInList));
 
     }
 }

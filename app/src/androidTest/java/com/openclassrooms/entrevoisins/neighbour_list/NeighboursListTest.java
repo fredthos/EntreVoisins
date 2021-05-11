@@ -1,6 +1,7 @@
 package com.openclassrooms.entrevoisins.neighbour_list;
 
 import android.app.Service;
+import android.content.Intent;
 import android.os.Parcelable;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -86,12 +87,12 @@ public class NeighboursListTest {
     @Test
     public void myNeighboursList_deleteAction_shouldRemoveItem() {
         // Given : We remove the element at position 2
-        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT - 1));
+        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT ));
         // When perform a click on a delete icon
         onView(ViewMatchers.withId(R.id.list_neighbours))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
-        // Then : the number of element is 10
-        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT - 2));
+        // Then : the number of element is 11
+        onView(ViewMatchers.withId(R.id.list_neighbours)).check(withItemCount(ITEMS_COUNT - 1));
     }
 
     /**
@@ -101,7 +102,8 @@ public class NeighboursListTest {
     public void myNeighbourList_onClickItem_shouldOpenNeighbourProfilActivity() {
         //Resultat : ouverture du detail
         //Click sur le voisin
-        onView(ViewMatchers.withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(ViewMatchers.withId(R.id.list_neighbours)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
         //Aprés: verification de l'affichage du voisin
         onView(ViewMatchers.withId(R.id.activity_profil_details)).check(matches(isDisplayed()));
     }
@@ -113,7 +115,8 @@ public class NeighboursListTest {
     public void activityProfilName_onNeighbourprofilactivity_isCorrect(){
         //Resultat : Affichage du bon prenom dans le profil
         //Ouverture du profil
-        onView(ViewMatchers.withId(R.id.list_neighbours)).perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        onView(ViewMatchers.withId(R.id.list_neighbours)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
         //Verification prenom du profile = prenom du voisin
         onView(ViewMatchers.withId(R.id.TBneighbourName)).check(matches(withText("Caroline")));
     }
@@ -155,7 +158,7 @@ public class NeighboursListTest {
      * Verification que l'onglet Favoris affiche que les voisins marqués favoris
      */
     @Test
-    public void inFavorisList_checkNeighbourtaggedIsFavoris_isCorrect(){
+    public void inFavorisList_checkNeighbourTaggedIsFavoris_isCorrect(){
         //Remise a zero de la liste de favoris
         service.getNeighbours().forEach(neighbour -> service.removeFavNeighbour(neighbour));
         //Verifier que la liste de favori est vide
