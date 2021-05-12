@@ -3,6 +3,7 @@ package com.openclassrooms.entrevoisins.neighbour_list;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Parcelable;
+import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
@@ -14,6 +15,7 @@ import com.openclassrooms.entrevoisins.events.DeleteNeighbourEvent;
 import com.openclassrooms.entrevoisins.model.Neighbour;
 import com.openclassrooms.entrevoisins.service.DummyNeighbourApiService;
 import com.openclassrooms.entrevoisins.service.NeighbourApiService;
+import com.openclassrooms.entrevoisins.ui.neighbour_list.AddNeighbourActivity;
 import com.openclassrooms.entrevoisins.ui.neighbour_list.ListNeighbourActivity;
 import com.openclassrooms.entrevoisins.ui.neighbour_list.NeighbourProfilActivity;
 import com.openclassrooms.entrevoisins.utils.DeleteViewAction;
@@ -32,6 +34,7 @@ import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.clearGlobalAssertions;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.assertThat;
 import static android.support.test.espresso.matcher.ViewMatchers.hasContentDescription;
@@ -103,7 +106,7 @@ public class NeighboursListTest {
         //Resultat : ouverture du detail
         //Click sur le voisin
         onView(ViewMatchers.withId(R.id.list_neighbours)).
-                perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+                perform(RecyclerViewActions.actionOnItemAtPosition(3, click()));
         //Aprés: verification de l'affichage du voisin
         onView(ViewMatchers.withId(R.id.activity_profil_details)).check(matches(isDisplayed()));
     }
@@ -112,7 +115,7 @@ public class NeighboursListTest {
      * Verification du nom du NeighbourProfilActivity est le meme que le voisin selectionné
      */
     @Test
-    public void activityProfilName_onNeighbourprofilactivity_isCorrect(){
+    public void ProfilName_onNeighbourProfilActivity_isCorrect(){
         //Resultat : Affichage du bon prenom dans le profil
         //Ouverture du profil
         onView(ViewMatchers.withId(R.id.list_neighbours)).
@@ -124,55 +127,11 @@ public class NeighboursListTest {
      * verification de suppression d'un neighbour dans la liste des favoris qui a ete peuplé auparavent
      */
     @Test
-    public void addNeighbour_inFavNeighboursList_andDeleteNeighbourInList_isCorrect() {
+    public void deleteNeighbourInFavNeighboursList__isCorrect() {
         //Ajout de favoris dans la liste des favoris
         //Ouverture des neighbour et ajout dans liste des favoris
-        onView(ViewMatchers.withId(R.id.list_neighbours)).
-                perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
-        onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
-        pressBack();
-
         onView(ViewMatchers.withId(R.id.list_neighbours)).
                 perform(RecyclerViewActions.actionOnItemAtPosition(5,click()));
-        onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
-        pressBack();
-
-        onView(ViewMatchers.withId(R.id.list_neighbours)).
-                perform(RecyclerViewActions.actionOnItemAtPosition(8,click()));
-        onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
-        pressBack();
-
-        //Selection de l'onglet favoris
-        onView(ViewMatchers.withId(R.id.list_neighbours)).perform(swipeLeft());
-
-        //Verfication du nombre de neigbour ajouter (3)
-        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).check(withItemCount(3));
-        //Suppresion d'un neighbour
-        onView(ViewMatchers.withId(R.id.list_fav_neighbours))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
-        //verification du nombre de neighbour dans la liste restant -1
-        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).check(withItemCount(2));
-    }
-
-    /**
-     * Verification que l'onglet Favoris affiche que les voisins marqués favoris
-     */
-    @Test
-    public void inFavorisList_checkNeighbourTaggedIsFavoris_isCorrect(){
-        //Remise a zero de la liste de favoris
-        service.getNeighbours().forEach(neighbour -> service.removeFavNeighbour(neighbour));
-        //Verifier que la liste de favori est vide
-        onView(ViewMatchers.withId(R.id.list_fav_neighbours))
-                .check(matches(hasMinimumChildCount(0)));
-        //Ajout de favoris dans la liste des favoris
-        //Ouverture des neighbour et ajout dans liste des favoris
-        onView(ViewMatchers.withId(R.id.list_neighbours)).
-                perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
-        onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
-        pressBack();
-
-        onView(ViewMatchers.withId(R.id.list_neighbours)).
-                perform(RecyclerViewActions.actionOnItemAtPosition(4,click()));
         onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
         pressBack();
 
@@ -185,6 +144,58 @@ public class NeighboursListTest {
         onView(ViewMatchers.withId(R.id.list_neighbours)).perform(swipeLeft());
 
         //Verfication du nombre de neigbour ajouter (3)
-        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).check(withItemCount(3));
+        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).check(withItemCount(2));
+        //Suppresion d'un neighbour
+        onView(ViewMatchers.withId(R.id.list_fav_neighbours))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
+        //verification du nombre de neighbour dans la liste restant -1
+        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).check(withItemCount(1));
+
+
+    }
+
+    /**
+     * Verification que l'onglet Favoris affiche que les voisins marqués favoris
+     */
+    @Test
+    public void checkNeighbourTaggedFavoris_inFavoriteList_isCorrect(){
+        //Remise a zero de la liste de favoris
+        service.getNeighbours().forEach(neighbour -> service.removeFavNeighbour(neighbour));
+        //Verifier que la liste de favori est vide
+        onView(ViewMatchers.withId(R.id.list_fav_neighbours))
+                .check(matches(hasMinimumChildCount(0)));
+        //Ajout de favoris dans la liste des favoris
+        //Ouverture de 2 neighbours et ajout dans liste des favoris
+        onView(ViewMatchers.withId(R.id.list_neighbours)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(7,click()));
+        onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
+        pressBack();
+
+        onView(ViewMatchers.withId(R.id.list_neighbours)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(4,click()));
+        onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
+        pressBack();
+
+        //Selection de l'onglet favoris
+        onView(ViewMatchers.withId(R.id.list_neighbours)).perform(swipeLeft());
+
+        //Verfication du nombre de neigbour ajouter (2)
+        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).check(withItemCount(2));
+
+        //Enlever les favoris de la liste des favoris
+        //Ouverture des 2 neighbour et enlever de la liste des favoris
+        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
+        pressBack();
+
+        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).
+                perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+        onView(ViewMatchers.withId(R.id.favoris_Button)).perform(click());
+        pressBack();
+
+        //Retour sur l'onglet My neighbour
+        onView(ViewMatchers.withId(R.id.list_fav_neighbours)).perform(swipeRight());
+
     }
 }
